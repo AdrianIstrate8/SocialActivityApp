@@ -20,6 +20,18 @@ export default class ActivityStore {
     );
   }
 
+  get groupedActivities() {
+    return Object.entries(
+      this.activitiesByDate.reduce((activities, activity) => {
+        const date = activity.date;
+        activities[date] = activities[date]
+          ? [...activities[date], activity]
+          : [activity];
+        return activities;
+      }, {} as { [key: string]: Activity[] })
+    );
+  }
+
   loadActivities = async () => {
     this.loadingInitial = true;
     try {
@@ -36,7 +48,6 @@ export default class ActivityStore {
   };
 
   loadActivity = async (id: string) => {
-    console.log(id);
     let activity = this.getActivity(id);
     if (activity) {
       this.selectedActivity = activity;
@@ -59,7 +70,6 @@ export default class ActivityStore {
   };
 
   private setActivity = (activity: Activity) => {
-    console.log(activity.date);
     activity.date = activity.date.split('T')[0];
     this.activityRegistry.set(activity.id, activity);
   };
