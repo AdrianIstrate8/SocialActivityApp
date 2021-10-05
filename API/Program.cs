@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Microsoft.AspNetCore.Identity;
+using Domain;
 
 namespace API
 {
@@ -40,9 +42,10 @@ namespace API
                 // We get DataContext as a service because we added it in the StartUp class in ConfigureServices
                 // and we use the service located pathern so we can populate context 
                 var context = services.GetRequiredService<DataContext>();
-                await context.Database.MigrateAsync();
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
 
-                await Seed.SeedData(context);
+                await context.Database.MigrateAsync();
+                await Seed.SeedData(context, userManager);
             }
             catch (Exception ex)
             {
