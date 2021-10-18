@@ -42,15 +42,16 @@ namespace API
         // then we typically add it as a service inside this container
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(opt => 
+            services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
             })
-            .AddFluentValidation(config => {
+            .AddFluentValidation(config =>
+            {
                 config.RegisterValidatorsFromAssemblyContaining<Create>();
             });
-           
+
             services.AddApplicationsServices(_config);
 
             services.AddIdentityServices(_config);
@@ -66,7 +67,7 @@ namespace API
 
             if (env.IsDevelopment())
             {
-                
+
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
@@ -75,6 +76,12 @@ namespace API
 
             // We need to route this requests to the apropiate API controller
             app.UseRouting();
+
+            //default files is going to look for anything inside the wwwroot folder that is called index.html
+            app.UseDefaultFiles();
+
+            //support for serving static files
+            app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
 
@@ -85,6 +92,7 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
