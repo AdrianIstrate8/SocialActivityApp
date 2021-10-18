@@ -65,11 +65,43 @@ namespace API
         {
             app.UseMiddleware<ExceptionMiddleware>();
 
+            app.UseXContentTypeOptions();
+            //our browser will not send any referreal information
+            app.UseReferrerPolicy(opt => opt.NoReferrer());
+            //gives us cross site scripting protection
+            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+            //prevent the application to be used in an iframe
+            app.UseXfo(opt => opt.Deny());
+            //content security policy
+            app.UseCsp(opt => opt
+                //we won't be able to have http and https content on our site
+                //it's all gonna be https
+                .BlockAllMixedContent()
+                //where our css, font, formactions, frame, image, scripts come from
+                //self = the domein where is comming from
+                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com"))
+                .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
+                .FormActions(s => s.Self())
+                .FrameAncestors(s => s.Self())
+                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com"))
+                .ScriptSources(s => s.Self().CustomSources("sha256-TT5oUAYpNdnopISKk/6Bwz8ou7fhRfEHihuGjlEfxyo="))
+            );
+
             if (env.IsDevelopment())
             {
 
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+            }
+            else
+            {
+                //a header for strict transport security
+                //and we enable this only in production because browsers will cache this information
+                app.Use(async (context, next) =>
+                {
+                    context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+                    await next.Invoke();
+                });
             }
 
             //app.UseHttpsRedirection();
