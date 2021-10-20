@@ -8,15 +8,15 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "@types/jest": "^26.0.24",
-    "@types/node": "^12.20.26",
-    "@types/react": "^17.0.24",
+    "@types/node": "^12.20.33",
+    "@types/react": "^17.0.30",
     "@types/react-calendar": "^3.4.3",
     "@types/react-dom": "^17.0.9",
     "@types/react-infinite-scroller": "^1.2.2",
     "axios": "^0.21.4",
-    "date-fns": "^2.24.0",
+    "date-fns": "^2.25.0",
     "formik": "^2.2.9",
-    "mobx": "^6.3.3",
+    "mobx": "^6.3.5",
     "mobx-react-lite": "^3.2.1",
     "react": "^17.0.2",
     "react-calendar": "^3.4.0",
@@ -30,15 +30,15 @@
     "react-toastify": "^8.0.3",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.4",
-    "typescript": "^4.4.3",
+    "typescript": "^4.4.4",
     "uuid": "^8.3.2",
     "web-vitals": "^1.1.2",
-    "yup": "^0.32.9"
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "postbuild": "move build ../API/wwwroot",
+    "postbuild": "rimraf ../API/wwwroot && move build ../API/wwwroot",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -61,8 +61,9 @@
     ]
   },
   "devDependencies": {
+    "@types/facebook-js-sdk": "^3.3.5",
     "@types/react-datepicker": "^4.1.7",
-    "@types/react-router-dom": "^5.3.0",
+    "@types/react-router-dom": "^5.3.1",
     "@types/uuid": "^8.3.1",
     "@types/yup": "^0.29.13"
   }

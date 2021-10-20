@@ -79,12 +79,23 @@ namespace API
                 .BlockAllMixedContent()
                 //where our css, font, formactions, frame, image, scripts come from
                 //self = the domein where is comming from
-                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com"))
+                .StyleSources(s => s.Self().CustomSources(
+                    "https://fonts.googleapis.com",
+                    "sha256-yChqzBduCCi4o4xdbXRXh4U/t1rP4UUUMJt+rB+ylUI="
+                ))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
                 .FormActions(s => s.Self())
                 .FrameAncestors(s => s.Self())
-                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com"))
-                .ScriptSources(s => s.Self().CustomSources("sha256-TT5oUAYpNdnopISKk/6Bwz8ou7fhRfEHihuGjlEfxyo="))
+                .ImageSources(s => s.Self().CustomSources(
+                    "https://res.cloudinary.com",
+                    "https://www.facebook.com",
+                    "https://scontent.fotp3-3.fna.fbcdn.net"
+                ))
+                .ScriptSources(s => s.Self().CustomSources(
+                    "https://connect.facebook.net",
+                    "sha256-TT5oUAYpNdnopISKk/6Bwz8ou7fhRfEHihuGjlEfxyo=",
+                    "sha256-GV9857QR1ujpaNK/nwtQlVtK29kJn6FOKgnAEIhQ06k="
+                ))
             );
 
             if (env.IsDevelopment())
@@ -104,7 +115,7 @@ namespace API
                 });
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             // We need to route this requests to the apropiate API controller
             app.UseRouting();
