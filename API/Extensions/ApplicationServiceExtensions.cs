@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Activities;
 using Application.Core;
 using Application.Interfaces;
+using Infrastructure.Email;
 using Infrastructure.Photos;
 using Infrastructure.Security;
 using MediatR;
@@ -83,6 +84,8 @@ namespace API.Extensions
             services.AddScoped<IUserAccessor, UserAccessor>();
 
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+
+            services.AddScoped<EmailSender>();
 
             services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
 
